@@ -1,10 +1,8 @@
 var path = require('path')
 const express = require('express')
 const axios = require('axios');
-
 require('dotenv').config({path: __dirname.replace('src/server','') + '/.env'})
-
-const getLocationPhoto = require(`${__dirname}/helpers/getLocationPhoto.js`).getLocationPhoto
+const {getLocationPhoto, formatUserInput} = require(`${__dirname}/helpers/helperFunctions.js`);
 
 const app = express()
 
@@ -23,9 +21,7 @@ app.listen(8081, function () {
 })
 
 app.get('/searchPlace/:city/:state/:country', async (req, res) => {
-    const formatUserInput = ({city,state,country}) => {
-        return `${city}${state === 'undefined'?'':(','+state)},${country}`.replace(' ','%20')
-    }
+
 
     const formattedUserInput = formatUserInput(req.params)
 
@@ -33,7 +29,16 @@ app.get('/searchPlace/:city/:state/:country', async (req, res) => {
     
     const {lat,lng} = response.data.postalCodes[0]
 
-    response = await axios.get(`https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
+
+    //for weather in 16 days : https://api.weatherbit.io/v2.0/forecast/daily?city=Raleigh,NC&key=API_KEY
+    response = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
+    console.log(response.data)
+
+    //for weather past 16 days : https://api.weatherbit.io/v2.0/history/daily?postal_code=27601&country=US&start_date=2021-09-03&end_date=2021-09-04&key=API_KEY
+
+    // response = await axios.get(`https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
+
+
 
     console.log(response.data.data[0])
 
