@@ -2,7 +2,7 @@ var path = require('path')
 const express = require('express')
 const axios = require('axios');
 require('dotenv').config({path: __dirname.replace('src/server','') + '/.env'})
-const {getLocationPhoto, formatUserInput} = require(`${__dirname}/helpers/helperFunctions.js`);
+const {getLocationPhoto, formatUserInput, returnDaysBeforeTrip} = require(`${__dirname}/helpers/helperFunctions.js`);
 
 const app = express()
 
@@ -20,7 +20,7 @@ app.listen(8081, function () {
     console.log('Example app listening on port 8081!')
 })
 
-app.get('/searchPlace/:city/:state/:country', async (req, res) => {
+app.get('/searchPlace/:city/:state/:country/:travelDate', async (req, res) => {
 
 
     const formattedUserInput = formatUserInput(req.params)
@@ -29,18 +29,24 @@ app.get('/searchPlace/:city/:state/:country', async (req, res) => {
     
     const {lat,lng} = response.data.postalCodes[0]
 
-
+    console.log('travelDate',req.params)
+    const daysBeforeTrip = returnDaysBeforeTrip(req.params)
+    if (daysBeforeTrip <= 16) {
     //for weather in 16 days : https://api.weatherbit.io/v2.0/forecast/daily?city=Raleigh,NC&key=API_KEY
-    response = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
-    console.log(response.data)
+        response = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
+        // console.log(response.data.data)
+        const weatherData = response.data.data.find(d => d.valid_date === req.params.travelDate)
+        console.log('weatherData',weatherData.temp)
+    }
+
+
 
     //for weather past 16 days : https://api.weatherbit.io/v2.0/history/daily?postal_code=27601&country=US&start_date=2021-09-03&end_date=2021-09-04&key=API_KEY
-
     // response = await axios.get(`https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
 
 
 
-    console.log(response.data.data[0])
+    // console.log(response.data.data[0])
 
-    let image = await getLocationPhoto(formattedUserInput.replace(',','+'))
+    // let image = await getLocationPhoto(formattedUserInput.replace(',','+'))
 })

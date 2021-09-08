@@ -10,16 +10,34 @@ console.log(datepicker)
 // import './styles/form.scss'
 // import './styles/section.scss'
 
-var today = new Date();
-const tomorrow = {
-    dd : String(today.getDate()),
-    mm : String(today.getMonth()),
-    yyyy : today.getFullYear()
+
+const today = new Date()
+const tomorrow = new Date(today)
+tomorrow.setDate(tomorrow.getDate() + 1)
+
+const tomorrowObj = {
+    dd : String(tomorrow.getDate()),
+    mm : String(tomorrow.getMonth()),
+    yyyy : tomorrow.getFullYear()
 }
 
-const picker = datepicker(document.querySelector('#calendar'), {minDate: new Date(tomorrow.yyyy, tomorrow.mm, tomorrow.dd)})
+let selectedDate;
 
-console.log(picker)
+const picker = datepicker(document.querySelector('#calendar'), {
+    minDate: new Date(tomorrowObj.yyyy, tomorrowObj.mm, tomorrowObj.dd),
+    onSelect: (instance, date) => {
+        var tomorrowObj = new Date(date);
+        var B = tomorrowObj.toISOString();
+        selectedDate = B.split('T')[0];
+      }
+})
+// console.log(picker)
+
+// const celendarInput = document.getElementById('calendar')
+// celendarInput.addEventListener('click', e => {
+//     e.preventDefault()
+//     console.log(e.target.value)
+// })
 
 picker.alwaysShow = true;
 picker.show()
@@ -31,7 +49,7 @@ testButton.addEventListener('click', async e => {
     // let res = await fetch('searchPlace/Las Vegas/Nevada/US')
     // let res = await fetch(`searchPlace/${'Houston'}/${'TX'}/${'US'}`)
     // let res = await fetch(`searchPlace/${'Houston'}/${undefined}/${'US'}`)
-    let res = await fetch(`searchPlace/${'Tokyo'}/${undefined}/${'Japan'}`)
+    let res = await fetch(`searchPlace/${'Tokyo'}/${undefined}/${'Japan'}/${selectedDate}`)
     res = await res.json()
     console.log(res)
 })
