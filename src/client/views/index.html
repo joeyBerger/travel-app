@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
-        <meta charset="utf-8">
-        <title>Test</title>
+        <!-- <meta charset="utf-8">
+        <title>Test</title> -->
         <!-- <link rel="stylesheet" href="/styles/resets.css">
         <link rel="stylesheet" href="/styles/base.css">
         <link rel="stylesheet" href="/styles/header.css">
         <link rel="stylesheet" href="/styles/form.css"> -->
         <!-- <link rel="stylesheet" href="/styles/footer.css">  -->
         <!-- <link rel="stylesheet" href="datepicker.min.css"> -->
+        <meta charset="utf-8" />
+        <title>Travel Planner</title>
+        <meta
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+          name="viewport"
+        />
     </head>
 
     <body>
 
-        <header>
+        <!-- <header>
             <div class="">
                 Logo
             </div>
             <div class="">
                 navigation
             </div>
-        </header>
+        </header> -->
 
         <main>
             <!-- <section>
@@ -35,45 +41,50 @@
                 <div id="results"></div>
             </section> -->
 
-            <input id="calendar"></input>
 
-            <button id="test-button">
+   
+
+            <!-- <div class="calendar">
                 TEST
-            </button>
-
-
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>           
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <form>
+            </div> -->
+            <h1>Travel Planner</h1>
+            <form id="input-form">
+                <h3>Plan A New Trip</h3>
+                <h5>Pick An Arrival Date</h5>
+                <div class="calendar">
+                    <div id="calendar"></div>
+                </div>
+                <p class="input-error" id="calendar-error">Please select a date</p>
                 <label for="city">City</label>
-                <input type="text" id="city" name="city"><br><br>
+                <input type="text" id="city" name="city">
+                <p class="input-error" id="city-error">Please enter a city</p>
                 <label for="state">State (if applicable)</label>
-                <input type="text" id="state" name="state"><br><br>
+                <input type="text" id="state" name="state">
                 <label for="country">Country</label>
-                <input type="text" id="country" name="country"><br><br>
-                <button id="find-location">Find Location</button>
-                <!-- <input type="submit"  value="Find Location"> -->
+                <input type="text" id="country" name="country">
+                <p class="input-error" id="country-error">Please enter a city</p>
+                <div class="button-container">
+                    <button id="find-location">Find Location</button>
+                </div>
             </form>
-            <image id = "destination-image" src=''></image>
+            <div id="planned-trips">
 
+            </div>
+            <!-- <section id="trip-0">
+                <h3 id="destination"></h3>
+                <h4 id="travel-date"></h4>
+                <h4 id="forecast"></h4>
+                <image id = "destination-image" src=''></image>
+                <div class="button-container">
+                    <button id="find-location">Save</button>
+                    <button id="find-location">Cancel</button>
+                </div>
+            </section> -->
         </main>
 
-        <footer>
+        <!-- <footer>
             <p>This is a footer</p>
-        </footer>
+        </footer> -->
         <!-- <script src="datepicker.min.js"></script> -->
         <script src="https://unpkg.com/js-datepicker"></script>
     </body>
