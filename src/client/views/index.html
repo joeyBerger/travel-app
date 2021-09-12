@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
-        <!-- <meta charset="utf-8">
-        <title>Test</title> -->
-        <!-- <link rel="stylesheet" href="/styles/resets.css">
-        <link rel="stylesheet" href="/styles/base.css">
-        <link rel="stylesheet" href="/styles/header.css">
-        <link rel="stylesheet" href="/styles/form.css"> -->
-        <!-- <link rel="stylesheet" href="/styles/footer.css">  -->
-        <!-- <link rel="stylesheet" href="datepicker.min.css"> -->
         <meta charset="utf-8" />
         <title>Travel Planner</title>
         <meta
@@ -18,44 +10,19 @@
     </head>
 
     <body>
-
         <header>
             <div class="title">
                 Travel Planner
             </div>
             <div id="toggle-container">
-                <button class="toggle-plan">Hide Planner</button>
+                <button id="toggle-button" class="toggle-plan">Hide Planner</button>
             </div>
         </header>
-
         <main>
-            <!-- <section>
-                <form class="" onsubmit="return handleSubmit(event)">
-                    <input id="name" type="text" name="input" value="" onblur="onBlur()" placeholder="Name">
-                    <input type="submit" name="" value="submit" onclick="return handleSubmit(event)" onsubmit="return handleSubmit(event)">
-                </form>
-            </section> -->
-
-            <!-- <section>
-                <strong>Form Results:</strong>
-                <div id="results"></div>
-            </section> -->
-
-
-   
-
-            <!-- <div class="calendar">
-                TEST
-            </div> -->
             <h1>Remember upcoming trips and prepare for weather!</h1>
-            <!-- <h1>Remember upcoming trips</h1> -->
             <section id="input-section">
-                <!-- <div id="toggle-container">
-                    <button class="toggle-plan">Hide</button>
-                </div> -->
                 <form id="input-form">
-                    <h3>Plan A New Trip</h3>
-                    
+                    <h3>Plan A New Trip</h3>                    
                     <h5>Pick An Arrival Date</h5>
                     <div class="calendar">
                         <div id="calendar"></div>
@@ -77,7 +44,6 @@
                 </form>
             </section>
 
-
             <!-- <div id="planned-trips">
                 <section class="trip-section" id="trip-0">
                    <h3>Planned Trip</h3>
@@ -96,10 +62,8 @@
                 </section>
              </div>             -->
 
-
             <div id="planned-trips"></div>
         </main>
-
         <!-- <script src="datepicker.min.js"></script> -->
         <script src="https://unpkg.com/js-datepicker"></script>
     </body>

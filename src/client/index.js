@@ -44,12 +44,12 @@ picker.show()
 let savedTrips = [];
 
 const inputSection = document.getElementById('input-section')
-const inputForm = document.getElementById('input-form')
+// const inputForm = document.getElementById('input-form')
 const findLocation = document.getElementById('find-location')
 // const image = document.getElementById("destination-image");
 const inputErrorMessages = document.getElementsByClassName("input-error");
 const processingMessage = document.getElementById('processing');
-const toggleContainer = document.getElementById('toggle-container');
+const toggleButton = document.getElementById('toggle-button');
 
 processingMessage.style.display = 'none'
 
@@ -61,16 +61,11 @@ let inputFields = {
 
 Object.keys(inputFields).forEach(k => inputFields[k] = document.getElementById(k))
 
-
-toggleContainer.addEventListener('click', function(e) {
-    const showing = inputForm.style.display !== 'none';
-    inputForm.style.display = showing ? 'none' : 'block';
+toggleButton.addEventListener('click', function(e) {
+    const showing = inputSection.style.display !== 'none';
+    inputSection.style.display = showing ? 'none' : 'block';
     e.srcElement.innerHTML = showing ? '+ Add Trip' : 'Hide Planner'
 })
-
-const handleToggleContainer = () => {
-
-}
 
 const handleUserInput = () => {
     let checksPassed = true;
@@ -133,11 +128,10 @@ findLocation.addEventListener('click', async e => {
         const tripId = savedTrips.length;
         const plannedTrips = document.getElementById('planned-trips');
         const container = createCustomElement('section',`trip-${tripId}`,'trip-section');
-
+        toggleButton.style.display = 'none'
 
         let elements = [];
-
-        elements.push(createCustomElement('h3',undefined,undefined,`Planned Trip`));
+        elements.push(createCustomElement('h3',`trip-header-${tripId}`,undefined,`Planned Trip ${tripId+1}`));
         elements.push(createCustomElement('h5',undefined,'trip-header','Destination'));
         elements.push(createCustomElement('h3',undefined,'trip-data',`${city}${state!=='undefined'?`, ${state}`:''} - ${country}`));
         elements.push(createCustomElement('h5',undefined,'trip-header','Travel Date'));
@@ -157,9 +151,9 @@ findLocation.addEventListener('click', async e => {
 
         elements.push(createCustomElement('div',undefined,'button-container',undefined,undefined));
 
-        let button = createCustomElement('button','save-button',undefined,'Save',undefined,{type : 'click', action : () => {
-            console.log('Save',tripId)            
+        let button = createCustomElement('button','save-button',undefined,'Save',undefined,{type : 'click', action : () => {       
             inputSection.style.display = 'block'
+            toggleButton.style.display = 'block'
             savedTrips.forEach(trip => trip.style.display = 'block')
             document.getElementById('save-button').remove()
             document.getElementById(`cancel-button-${tripId}`).innerHTML = 'Remove Trip'
@@ -168,15 +162,27 @@ findLocation.addEventListener('click', async e => {
 
         button = createCustomElement('button',`cancel-button-${tripId}`,undefined,'Cancel',undefined,{type : 'click', action : () => {
             inputSection.style.display = 'block'
-            container.remove();
             savedTrips.forEach(trip => trip.style.display = 'block')
+
+            // savedTrips.slice(tripId).forEach((t,i) => {
+            //     document.getElementById(`trip-header-${i}`).innerHTML = `Planned Trip ${i}`;
+            //     console.log('i',i)
+            // })
+
+            container.remove();
             savedTrips = savedTrips.slice(tripId,tripId)
+
+            console.log(savedTrips)
+
+            if (savedTrips.length === 0) {
+                toggleButton.style.display = 'block'
+                toggleButton.innerHTML = 'Hide Planner'
+            }
         }});
         elements[elements.length-1].appendChild(button)
 
         elements.forEach(e => container.appendChild(e))
         plannedTrips.appendChild(container)
         savedTrips.push(container)
-    }
-    
+    }    
 })
