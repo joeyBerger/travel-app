@@ -1,5 +1,6 @@
 import { handleUserInput } from './js/formHandler'
 import { getEssentialElements, createCustomElement } from './js/elementHelper'
+import {addToggleEventListener} from './js/addToggleEventListener'
 import datepicker from 'js-datepicker'
 
 import './styles/resets.scss'
@@ -58,12 +59,8 @@ const setupHandleUserInput = () => {
 
 //event listeners
 
-//add event listner and handle toggle logic
-toggleButton.addEventListener('click', function(e) {
-    const showing = inputSection.style.display !== 'none';
-    inputSection.style.display = showing ? 'none' : 'block';
-    e.srcElement.innerHTML = showing ? toggleButtonLabels.show : toggleButtonLabels.hide
-})
+//handle toggle logic
+addToggleEventListener(toggleButton,inputSection,toggleButtonLabels);
 
 //add event listener for API call, modifies the DOM based on recieved info
 findLocation.addEventListener('click', async e => {
@@ -116,9 +113,9 @@ findLocation.addEventListener('click', async e => {
         elements.push(createCustomElement('h5',undefined,'trip-header','Travel Date'));
         elements.push(createCustomElement('h3',undefined,'trip-data',selectedDate))
         elements.push(createCustomElement('h5',undefined,'trip-header','Low'));
-        elements.push(createCustomElement('h3',undefined,'trip-data',`${res.lowTemp.celcius}° C / ${res.lowTemp.fahrenheit}° F`));
+        elements.push(createCustomElement('h3',undefined,'trip-data',`${res.lowTemp.celcius}°C / ${res.lowTemp.fahrenheit}°F`));
         elements.push(createCustomElement('h5',undefined,'trip-header','High'));
-        elements.push(createCustomElement('h3',undefined,'trip-data',`${res.highTemp.celcius}° C / ${res.highTemp.fahrenheit}° F`));
+        elements.push(createCustomElement('h3',undefined,'trip-data',`${res.highTemp.celcius}°C / ${res.highTemp.fahrenheit}°F`));
         elements.push(createCustomElement('h5',undefined,'trip-header','Days Until Trip'));
         elements.push(createCustomElement('h3',undefined,'trip-data',res.daysBeforeTrip));
         elements.push(createCustomElement('div',undefined,'image-container',undefined,undefined));

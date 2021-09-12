@@ -1,6 +1,4 @@
-const axios = require('axios');
-
-returnDaysBeforeTrip = ({travelDate}) => {
+const returnDaysBeforeTrip = ({travelDate}) => {
         var now = new Date();
         now.setUTCHours(0,0,0,0);
         var travelDateObj = new Date(travelDate);
@@ -14,13 +12,9 @@ returnDaysBeforeTrip = ({travelDate}) => {
 }
 
 module.exports = {
-    getLocationPhoto: async formattedUserInput => {
-        const res = await axios.get(`https://pixabay.com/api/?key=${process.env.PIXABAY_API_KEY}&q=${formattedUserInput}+city&image_type=photo`);
-        return res.data.hits[Math.floor(Math.random(res.data.hits.length))];
-    },
     formatUserInput: ({city,state,country}) => {
         return `${city}${state === 'undefined'?'':(','+state)},${country}`.replace(' ','%20')
     },
-    convertCelsiusTofahrenheit: (temp) => {return Math.round(((temp / 5) * 9) + 32);},
+    convertCelsiusToFahrenheit: (temp) => {return Math.round(((temp / 5) * 9) + 32);},
     returnDaysBeforeTrip: returnDaysBeforeTrip,
 };
