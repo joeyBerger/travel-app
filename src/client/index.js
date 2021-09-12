@@ -42,14 +42,14 @@ picker.alwaysShow = true;
 picker.show()
 
 let savedTrips = [];
+// this.savedTrips = [];
 
 const inputSection = document.getElementById('input-section')
-// const inputForm = document.getElementById('input-form')
 const findLocation = document.getElementById('find-location')
-// const image = document.getElementById("destination-image");
 const inputErrorMessages = document.getElementsByClassName("input-error");
 const processingMessage = document.getElementById('processing');
 const toggleButton = document.getElementById('toggle-button');
+const plannedTrips = document.getElementById('planned-trips');
 
 processingMessage.style.display = 'none'
 
@@ -103,6 +103,15 @@ const createCustomElement = (tag,id,className,innerHTML,src,event) => {
     return element;
 }
 
+const renamePlannedTripId = () => {
+    console.log(savedTrips)
+    // savedTrips.slice(tripId).forEach((t,i) => {
+    // savedTrips.forEach((t,i) => {
+    //     document.getElementById(`trip-header-${i}`).innerHTML = `Planned Trip ${i}`;
+    //     console.log('i',i)
+    // })
+}
+
 findLocation.addEventListener('click', async e => {
     e.preventDefault();
     for (let i = 0; i < inputErrorMessages.length; i++) inputErrorMessages[i].style.display = 'none'
@@ -124,14 +133,14 @@ findLocation.addEventListener('click', async e => {
     } else {
         inputSection.style.display = 'none'
         savedTrips.forEach(trip => trip.style.display = 'none')
+        console.log('savedTrips turning off',savedTrips)
 
         const tripId = savedTrips.length;
-        const plannedTrips = document.getElementById('planned-trips');
         const container = createCustomElement('section',`trip-${tripId}`,'trip-section');
         toggleButton.style.display = 'none'
 
         let elements = [];
-        elements.push(createCustomElement('h3',`trip-header-${tripId}`,undefined,`Planned Trip ${tripId+1}`));
+        elements.push(createCustomElement('h3',`trip-header-${tripId}`,'planned-trip',`Planned Trip ${tripId+1}`));
         elements.push(createCustomElement('h5',undefined,'trip-header','Destination'));
         elements.push(createCustomElement('h3',undefined,'trip-data',`${city}${state!=='undefined'?`, ${state}`:''} - ${country}`));
         elements.push(createCustomElement('h5',undefined,'trip-header','Travel Date'));
@@ -156,21 +165,33 @@ findLocation.addEventListener('click', async e => {
             toggleButton.style.display = 'block'
             savedTrips.forEach(trip => trip.style.display = 'block')
             document.getElementById('save-button').remove()
+            console.log('tripId in save',tripId)
             document.getElementById(`cancel-button-${tripId}`).innerHTML = 'Remove Trip'
         }});
         elements[elements.length-1].appendChild(button)
 
-        button = createCustomElement('button',`cancel-button-${tripId}`,undefined,'Cancel',undefined,{type : 'click', action : () => {
+        button = createCustomElement('button',`cancel-button-${tripId}`,undefined,'Cancel',undefined,{type : 'click', action : (e) => {
             inputSection.style.display = 'block'
             savedTrips.forEach(trip => trip.style.display = 'block')
-
-            // savedTrips.slice(tripId).forEach((t,i) => {
-            //     document.getElementById(`trip-header-${i}`).innerHTML = `Planned Trip ${i}`;
-            //     console.log('i',i)
-            // })
-
+            const id = parseInt(e.target.id.replace('cancel-button-',''))
             container.remove();
-            savedTrips = savedTrips.slice(tripId,tripId)
+            savedTrips = savedTrips.slice(0,id).concat(savedTrips.slice(id+1))
+
+            savedTrips.forEach((st,i) => {
+                st.id = `trip-${i}`
+                for (let j = 0; j < st.children.length; j++) {
+                    if (st.children[j].id.includes('trip-header')) {
+                        st.children[j].innerHTML = `Planned Trip ${i+1}`
+                    }
+                    if (st.children[j].className.includes('button-container')) {
+                        for (let k = 0; k < st.children[j].children.length; k++) {
+                            if (st.children[j].children[k].id.includes('cancel-button')) {
+                                st.children[j].children[k].id = `cancel-button-${i}`
+                            }
+                        }
+                    }
+                }
+            })
 
             console.log(savedTrips)
 
@@ -184,5 +205,6 @@ findLocation.addEventListener('click', async e => {
         elements.forEach(e => container.appendChild(e))
         plannedTrips.appendChild(container)
         savedTrips.push(container)
+        console.log('savedTrips after push',savedTrips)
     }    
 })
