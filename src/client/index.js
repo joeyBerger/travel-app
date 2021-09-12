@@ -41,12 +41,17 @@ console.log(picker)
 picker.alwaysShow = true;
 picker.show()
 
-const savedTrips = [];
+let savedTrips = [];
 
+const inputSection = document.getElementById('input-section')
 const inputForm = document.getElementById('input-form')
 const findLocation = document.getElementById('find-location')
-const image = document.getElementById("destination-image");
+// const image = document.getElementById("destination-image");
 const inputErrorMessages = document.getElementsByClassName("input-error");
+const processingMessage = document.getElementById('processing');
+const toggleContainer = document.getElementById('toggle-container');
+
+processingMessage.style.display = 'none'
 
 let inputFields = {
     city : undefined,
@@ -56,10 +61,16 @@ let inputFields = {
 
 Object.keys(inputFields).forEach(k => inputFields[k] = document.getElementById(k))
 
-// let width = document.body.clientHeight
-// window.addEventListener('resize',() => {
-//     console.log(document.body.clientWidth)
-// })
+
+toggleContainer.addEventListener('click', function(e) {
+    const showing = inputForm.style.display !== 'none';
+    inputForm.style.display = showing ? 'none' : 'block';
+    e.srcElement.innerHTML = showing ? '+ Add Trip' : 'Hide Planner'
+})
+
+const handleToggleContainer = () => {
+
+}
 
 const handleUserInput = () => {
     let checksPassed = true;
@@ -67,7 +78,6 @@ const handleUserInput = () => {
     Object.keys(inputFields).forEach(k => {
         const {value} = inputFields[k];
         returnObject[k] = value;
-        console.log(value)
         if (k !== 'state' && !value) {
             checksPassed = false;
             for (let i = 0; i < inputErrorMessages.length; i++) {
@@ -90,10 +100,9 @@ const createCustomElement = (tag,id,className,innerHTML,src,event) => {
     if (id) element.setAttribute("id", id);
     if (className) element.setAttribute("class", className);
     if (innerHTML) element.innerHTML = innerHTML;
-    if (src) {
-        element.src = 'https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Flaurabegleybloom%2Ffiles%2F2018%2F06%2FCappadocia-by-%40izkiz-1200x801.jpg';
-        console.log(src)
-    }
+    if (src) element.src = src
+    // if (src) element.src = 'https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Flaurabegleybloom%2Ffiles%2F2018%2F06%2FCappadocia-by-%40izkiz-1200x801.jpg';
+
     if (event) element.addEventListener(event.type,event.action)
     
     return element;
@@ -103,63 +112,65 @@ findLocation.addEventListener('click', async e => {
     e.preventDefault();
     for (let i = 0; i < inputErrorMessages.length; i++) inputErrorMessages[i].style.display = 'none'
     const userInput = handleUserInput();
-    console.log(userInput)
-
     if (!userInput) return;
     const {city,state,country,selectedDate} = userInput
+    processingMessage.style.display = 'block'
     let res = await fetch(`searchPlace/${city}/${state}/${country}/${selectedDate}`)
     res = await res.json()
+    console.log(res)
+    processingMessage.style.display = 'none'
     if (res.error) {
-
+        for (let i = 0; i < inputErrorMessages.length; i++) {
+            if (inputErrorMessages[i].id.includes('server')) {
+                inputErrorMessages[i].style.display = 'block'
+                inputErrorMessages[i].style.innerHTML = res.error
+            }
+        }
     } else {
-        inputForm.style.display = 'none'
-        // image.src = res.webformatURL;
-        // const destination = document.getElementById('destination')
-        // destination.innerHTML = `${city}${state!=='undefined'?`, ${state}`:''} ${country}`
-        // const travelDate = document.getElementById('travel-date')
-        // travelDate.innerHTML = `Days Until Trip: ${res.daysBeforeTrip}`;
-        // const forecast = document.getElementById('forecast');
-        // forecast.innerHTML = `Forecast: ${res.celcius}° / ${res.farenheight}°`;
+        inputSection.style.display = 'none'
+        savedTrips.forEach(trip => trip.style.display = 'none')
 
         const tripId = savedTrips.length;
         const plannedTrips = document.getElementById('planned-trips');
-        const container = createCustomElement('section',`trip-${tripId}`)
+        const container = createCustomElement('section',`trip-${tripId}`,'trip-section');
 
-        savedTrips.forEach(trip => trip.style.display = 'none')
 
         let elements = [];
-        elements.push(createCustomElement('h3','destination',undefined,`${city}${state!=='undefined'?`, ${state}`:''} ${country}`));
-        elements.push(createCustomElement('h4','forecast',undefined,`Forecast: ${res.celcius}° C / ${res.farenheight}° F`));
-        elements.push(createCustomElement('h4','travel-date',undefined,`Days Until Trip: ${res.daysBeforeTrip}`));
-        // elements.push(createCustomElement('img','destination-image',undefined,undefined,res.webformatURL));
+
+        elements.push(createCustomElement('h3',undefined,undefined,`Planned Trip`));
+        elements.push(createCustomElement('h5',undefined,'trip-header','Destination'));
+        elements.push(createCustomElement('h3',undefined,'trip-data',`${city}${state!=='undefined'?`, ${state}`:''} - ${country}`));
+        elements.push(createCustomElement('h5',undefined,'trip-header','Travel Date'));
+        elements.push(createCustomElement('h3',undefined,'trip-data',selectedDate))
+        elements.push(createCustomElement('h5',undefined,'trip-header','Low'));
+        elements.push(createCustomElement('h3',undefined,'trip-data',`${res.lowTemp.celcius}° C / ${res.lowTemp.fahrenheit}° F`));
+        elements.push(createCustomElement('h5',undefined,'trip-header','High'));
+        elements.push(createCustomElement('h3',undefined,'trip-data',`${res.highTemp.celcius}° C / ${res.highTemp.fahrenheit}° F`));
+        elements.push(createCustomElement('h5',undefined,'trip-header','Days Until Trip'));
+        elements.push(createCustomElement('h3',undefined,'trip-data',res.daysBeforeTrip));
+
+        // elements.push(createCustomElement('h4','travel-date',undefined,`Travel Date: ${selectedDate}`));
 
         elements.push(createCustomElement('div',undefined,'image-container',undefined,undefined));
         let image = createCustomElement('img','destination-image',undefined,undefined,res.webformatURL);
         elements[elements.length-1].appendChild(image)
 
-
-        // elements.push(createCustomElement('div',undefined,'image-container',undefined,undefined));
-        // // let image = createCustomElement('img','destination-image',undefined,undefined,res.webformatURL);
-        // let image = createCustomElement('div','destination-image',undefined,'TEST');
-        // elements[elements.length-1].appendChild(image)
-
-
         elements.push(createCustomElement('div',undefined,'button-container',undefined,undefined));
 
         let button = createCustomElement('button','save-button',undefined,'Save',undefined,{type : 'click', action : () => {
             console.log('Save',tripId)            
-            inputForm.style.display = 'block'
+            inputSection.style.display = 'block'
             savedTrips.forEach(trip => trip.style.display = 'block')
             document.getElementById('save-button').remove()
-            document.getElementById(`cancel-button-${tripId}`).innerHTML = 'Remove Trip'            
+            document.getElementById(`cancel-button-${tripId}`).innerHTML = 'Remove Trip'
         }});
         elements[elements.length-1].appendChild(button)
 
         button = createCustomElement('button',`cancel-button-${tripId}`,undefined,'Cancel',undefined,{type : 'click', action : () => {
-            inputForm.style.display = 'block'
+            inputSection.style.display = 'block'
             container.remove();
             savedTrips.forEach(trip => trip.style.display = 'block')
-            savedTrips.slice(tripId,tripId)
+            savedTrips = savedTrips.slice(tripId,tripId)
         }});
         elements[elements.length-1].appendChild(button)
 
@@ -167,5 +178,5 @@ findLocation.addEventListener('click', async e => {
         plannedTrips.appendChild(container)
         savedTrips.push(container)
     }
-    console.log(res)
+    
 })

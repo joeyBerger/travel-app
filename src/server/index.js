@@ -6,7 +6,7 @@ const {
     getLocationPhoto,
     formatUserInput,
     returnDaysBeforeTrip,
-    convertCelsiusToFarenheight
+    convertCelsiusTofahrenheit
 } = require(`${__dirname}/helpers/helperFunctions.js`);
 
 const app = express()
@@ -49,14 +49,17 @@ app.get('/searchPlace/:city/:state/:country/:travelDate', async (req, res) => {
     //         } else {
     //                 //for weather past 16 days : https://www.weatherbit.io/api/weather-history-daily
     //                 response = await axios.get(`https://api.weatherbit.io/v2.0/history/daily?lat=${lat}&lon=${lng}&start_date=2021-09-03&end_date=2021-09-04&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
-    //                 weatherData.temp = response.data.data[0].temp
+    //                 weatherData = response.data.data[0]
+    //                 // console.log(response.data.data[0])
     //         }
     //         if (!weatherData) resolve({error:"Could not get weather"})
     //         else {
+    //             console.log(weatherData)
+    //             //max_temp   //min_temp
     //             resolve({
     //                 daysBeforeTrip,
-    //                 celcius : weatherData.temp,
-    //                 farenheight : convertCelsiusToFarenheight(weatherData.temp)
+    //                 highTemp : {celcius : weatherData.max_temp, fahrenheit : convertCelsiusTofahrenheit(weatherData.max_temp)},
+    //                 lowTemp : {celcius : weatherData.min_temp, fahrenheit : convertCelsiusTofahrenheit(weatherData.min_temp)},
     //             })
     //         }
     //     } catch(e) {
@@ -73,13 +76,26 @@ app.get('/searchPlace/:city/:state/:country/:travelDate', async (req, res) => {
     // })    
     // Promise.all([weatherPromise,imagePromise]).then((values) => {
     //     console.log(values)
-    //     if (!values[0].farenheight) {
-    //         return values[0]
-    //     }
+    //     // if (!values[0].fahrenheit) {
+    //     //     return values[0]
+    //     // }
     //     res.send(Object.assign(values[0],values[1]))
     // });
     
 
     // console.log(req.params)
-    res.send({daysBeforeTrip: tempNumber++, celcius: 33, farenheight: 91, webformatURL: 'https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Flaurabegleybloom%2Ffiles%2F2018%2F06%2FCappadocia-by-%40izkiz-1200x801.jpg'}) 
+    res.send(
+        {
+            "daysBeforeTrip": 5,
+            "highTemp": {
+                "celcius": 27.4,
+                "fahrenheit": 81
+            },
+            "lowTemp": {
+                "celcius": 12.4,
+                "fahrenheit": 54
+            },
+            "webformatURL": "https://pixabay.com/get/gb072112e88de31104c175bec5b24060da474a7440015ec4bc947f1c64d31e6863a1e88e04ab26bbb60fece08770061855db9274d81ce879a0c56acfd25b2e69c_640.jpg"
+        }
+    ) 
 })

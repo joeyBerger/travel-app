@@ -1,33 +1,102 @@
+body {
+    background-color: rgb(68,56,46);
+    
+    // font-family: Helvetica, sans-serif;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 
-h1 {
-    font-size: 2.5em;
-    text-align: center;
+    color: floralwhite;
 }
 
-h3,h4 {
-    font-size: 2.0em;
+h1 {
+    font-size: 1.9em;
+    text-align: left;
+    margin: 20px 40px 0px;
+    // background-color: rgb(0, 204, 255);
+}
+
+h3,h4,h5 {
+    font-size: 1.8em;
     text-align: center;
     padding-bottom: 20px;
+    color: red;
 }
 
 h5, label {
-    font-size: 1.3em;
+    font-size: 0.9em;
     // text-align: center;
     padding-bottom: 20px;
 }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 40px;
+    font-size: 1.5em;
+}
+
 button {
-    margin: 10px;
+	color: red;
+	text-transform: uppercase;
+	background: #ffffff;
+	padding: 10px;
+	border: 2px solid red;
+	border-radius: 6px;
+	display: inline-block;
+	transition: all 0.3s ease 0s;
+    margin-top: 20px;
+}
+
+label {
+    // display: block;
+    // text-align: center;
+    // line-height: 50%;
+    // padding: 0px 0px 10px 0px;
+    // width: 30%;
+    // font-size: 0.9em;
+}
+
+input {
+    margin-bottom: 20px;
+}
+
+button:hover {
+	color: #20bf6b;
+	border-radius: 50px;
+	border-color: #20bf6b;
+	transition: all 0.3s ease 0s;
 }
 
 .button-container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-evenly;
     align-items: center;
     padding-top: 20px;
     padding-right: 30px;
-    color: red;
+    color: #20bf6b;
+}
+
+.title {
+    font-style: oblique;
+}
+
+#toggle-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+
+    // padding-top: 0px;
+    // padding-bottom: 10px;
+    // padding-right: 0px;
+    padding: 0px;
+    color: #20bf6b;
+}
+
+.toggle-plan {
+    border-radius: 1px;
+    padding: 5px;
+    margin-top: 0px;
 }
 
 .calendar {
@@ -40,7 +109,7 @@ button {
 }
 
 .input-error {
-    font-size: 1.05em;
+    font-size: 0.9em;
     color: red;
     padding-bottom: 15px;
     display: none;
@@ -57,7 +126,11 @@ button {
     // display: flex;
     // align-items: center;
     // justify-content: center;
+    background-color:  rgb(68,56,46);
     overflow: hidden;
+    box-shadow: 6px 6px 5px rgb(170, 168, 168);
+    border-radius: 10px;
+
 }
 
 .qs-day {
@@ -72,17 +145,40 @@ button {
     font-weight: 200;
 }
 
+#processing {
+    font-size: 1.5em;
+    color: blue;
+    text-align: center;
+}
+
+.trip-section {
+    padding: 20px;
+    background-color: white;
+}
+
+.trip-header {
+    font-size: 0.9em;
+    padding: 0px;
+}
+
+.trip-data {
+    color: black;
+    font-size: 1.4em;
+}
+
+
+
 @media(min-width:500px) {
-    body {
-        background-color: blue;
-    }
+    // body {
+    //     background-color: blue;
+    // }
     .qs-datepicker-container {
         width: 19em;
     }
 }
 
 @media(min-width:900px) {
-    body {
-        background-color: red;
-    }
+    // body {
+    //     background-color: red;
+    // }
 }

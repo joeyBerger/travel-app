@@ -21,6 +21,6 @@ module.exports = {
     formatUserInput: ({city,state,country}) => {
         return `${city}${state === 'undefined'?'':(','+state)},${country}`.replace(' ','%20')
     },
-    convertCelsiusToFarenheight: (temp) => {return Math.round(((temp / 5) * 9) + 32);},
+    convertCelsiusTofahrenheit: (temp) => {return Math.round(((temp / 5) * 9) + 32);},
     returnDaysBeforeTrip: returnDaysBeforeTrip,
 };
