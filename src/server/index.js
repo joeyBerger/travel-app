@@ -10,19 +10,16 @@ const {
 
 const {getLocationPhoto} = require(`${__dirname}/helpers/getLocationPhoto.js`);
 
+let plannedTrips = {}
 
 const app = express()
 
 app.use(express.static('dist'))
 
-console.log(__dirname)
-
 app.get('/', function (req, res) {
     // res.sendFile('dist/index.html')
     res.sendFile(path.resolve('src/client/views/index.html'))
 })
-
-let tempNumber = 0;
 
 // designates what port the app will listen to for incoming requests
 app.listen(8081, function () {
@@ -52,12 +49,9 @@ app.get('/searchPlace/:city/:state/:country/:travelDate', async (req, res) => {
                     //for weather past 16 days : https://www.weatherbit.io/api/weather-history-daily
                     response = await axios.get(`https://api.weatherbit.io/v2.0/history/daily?lat=${lat}&lon=${lng}&start_date=2021-09-03&end_date=2021-09-04&key=${process.env.WEATHERBIT_API_KEY}&include=minutely`)
                     weatherData = response.data.data[0]
-                    // console.log(response.data.data[0])
             }
             if (!weatherData) resolve({error:"Could not get weather"})
             else {
-                console.log(weatherData)
-                //max_temp   //min_temp
                 resolve({
                     daysBeforeTrip,
                     highTemp : {celcius : weatherData.max_temp, fahrenheit : convertCelsiusToFahrenheit(weatherData.max_temp)},
@@ -77,23 +71,9 @@ app.get('/searchPlace/:city/:state/:country/:travelDate', async (req, res) => {
         resolve({webformatURL : image.webformatURL})
     })    
     Promise.all([weatherPromise,imagePromise]).then((values) => {
-        res.send(Object.assign(values[0],values[1]))
+        const data = Object.assign(values[0],values[1])
+        //key / value pair that stores data for key of selected date
+        plannedTrips[req.params.selectedDate] = data;
+        res.send(data)
     });
-    
-
-    // console.log(req.params)
-    // res.send(
-    //     {
-    //         "daysBeforeTrip": 5,
-    //         "highTemp": {
-    //             "celcius": 27.4,
-    //             "fahrenheit": 81
-    //         },
-    //         "lowTemp": {
-    //             "celcius": 12.4,
-    //             "fahrenheit": 54
-    //         },
-    //         "webformatURL": "https://pixabay.com/get/gb072112e88de31104c175bec5b24060da474a7440015ec4bc947f1c64d31e6863a1e88e04ab26bbb60fece08770061855db9274d81ce879a0c56acfd25b2e69c_640.jpg"
-    //     }
-    // ) 
 })

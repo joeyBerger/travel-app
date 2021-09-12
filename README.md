@@ -23,3 +23,7 @@ Project demonstrating Webpack, service workers, jest testing and calls to variou
 - Select a travel date, location and add trip. If location can be found, data pertaining to the trip will be displayed to the DOM.
 - Save or Cancel the proposed trip.
 - Add additional trips, or remove trips already created.
+
+## Extend your Project/Ways to Stand Out Requirements Met
+- Pull in an image for the country from Pixabay API when the entered location brings up no results (good for obscure localities).
+- Allow the user to remove the trip.
